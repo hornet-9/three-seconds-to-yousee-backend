@@ -43,6 +43,13 @@ app.configure(socketio(function(io) {
 
       const qwerty = setInterval(func, 1500);
 
+      socket.on('pause', function () {
+          clearInterval(qwerty);
+      })
+      socket.on('unpause', function () {
+          const qwerty = setInterval(func, 1500);
+      })
+
       async function func() {
         response = await appointments.find({
           query: {

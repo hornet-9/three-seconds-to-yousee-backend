@@ -8,9 +8,21 @@
   <h1>3 Seconds to youSee</h1>
   <p>Here are some pretend coordinates, coming from a database via a websocket connection</p>
   <ul id="list1"></ul>
+  <button onclick='pause()'>pause</button>
+  <button onclick='unpause()'>unpause</button>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
   <script type="text/javascript" src="//unpkg.com/@feathersjs/client@^3.0.0/dist/feathers.js"></script>
   <script type="text/javascript" src="//unpkg.com/feathers-memory@^2.0.0/dist/feathers-memory.js"></script>
   <script src="client.js"></script>
+  <script>
+    function pause() {
+      console.log('pause')
+          socket.emit('pause');
+    }
+    function unpause() {
+      console.log('unpause')
+          socket.emit('unpause');
+    }
+  </script>
 </body>
 </html>
