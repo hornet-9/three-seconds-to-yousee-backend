@@ -1,9 +1,12 @@
 /* global io */
 
 // Create a websocket connecting to our Feathers server
-const socket = io('http://localhost:3030');
+const socket = io('http://yousee.jdt.agency:8080/');
 
-// Listen to new messages being created
-socket.on('news', message =>
-  console.log('Coordinates', message)
+socket.on('news', message => {
+    var node = document.createElement("LI");
+    var textnode = document.createTextNode(message.north + ', ' + message.east);
+    node.appendChild(textnode);
+    document.getElementById("list1").appendChild(node);
+  }
 );

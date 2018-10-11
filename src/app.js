@@ -40,7 +40,7 @@ app.configure(socketio(function(io) {
     let response;
     let i = 1;
 
-    const qwerty = setInterval(func, 3000);
+    const qwerty = setInterval(func, 1500);
 
     async function func() {
       response = await appointments.find({
