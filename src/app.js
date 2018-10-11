@@ -45,14 +45,14 @@ app.configure(socketio(function(io) {
     async function func() {
       response = await appointments.find({
         query: {
-          step: i.toString()
+          step: i
         }
     });
     socket.emit('news', response.data[0]);
-      i++
       if (!response.data[0]) {
         clearInterval(qwerty);
       }
+      i++
     }
 
 
