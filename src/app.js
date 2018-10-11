@@ -35,26 +35,28 @@ app.configure(express.rest());
 app.configure(socketio(function(io) {
   io.on('connection', function(socket) {
 
-    const appointments = app.service('appointments');
+  socket.on('ready', function () {
+      const appointments = app.service('appointments');
 
-    let response;
-    let i = 1;
+      let response;
+      let i = 1;
 
-    const qwerty = setInterval(func, 1500);
+      const qwerty = setInterval(func, 1500);
 
-    async function func() {
-      response = await appointments.find({
-        query: {
-          step: i
+      async function func() {
+        response = await appointments.find({
+          query: {
+            step: i
+          }
+      });
+        if (!response.data[0]) {
+          clearInterval(qwerty);
+        } else {
+          i++
+          socket.emit('news', response.data[0]);
         }
-    });
-      if (!response.data[0]) {
-        clearInterval(qwerty);
-      } else {
-        i++
-        socket.emit('news', response.data[0]);
       }
-    }
+    });
   });
 
   // Registering Socket.io middleware
