@@ -48,16 +48,13 @@ app.configure(socketio(function(io) {
           step: i
         }
     });
-    socket.emit('news', response.data[0]);
       if (!response.data[0]) {
         clearInterval(qwerty);
+      } else {
+        i++
+        socket.emit('news', response.data[0]);
       }
-      i++
     }
-
-
-
-
   });
 
   // Registering Socket.io middleware

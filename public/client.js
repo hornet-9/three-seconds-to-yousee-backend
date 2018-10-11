@@ -1,7 +1,7 @@
 /* global io */
 
 // Create a websocket connecting to our Feathers server
-const socket = io('http://yousee.jdt.agency:3030/');
+const socket = io('http://localhost:3030/');
 
 socket.on('news', message => {
     var node = document.createElement("LI");
