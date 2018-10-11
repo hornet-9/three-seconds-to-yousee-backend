@@ -50,7 +50,7 @@ app.configure(socketio(function(io) {
     });
     socket.emit('news', response.data[0]);
       i++
-      if (i === 9) {
+      if (!response.data[0]) {
         clearInterval(qwerty);
       }
     }
@@ -90,11 +90,3 @@ const server = app.listen(port);
 server.on('listening', () =>
   logger.info('Feathers application started on http://%s:%d', app.get('host'), port)
 );
-
-
-function createAndFind() {
-  // Stores a reference to the messages service so we don't have to call it all the time
-
-}
-
-createAndFind();
