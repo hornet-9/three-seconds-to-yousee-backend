@@ -51,12 +51,15 @@ app.configure(socketio(function (io) {
       app.service('appointments').create({
         step: 'pause'
       });
+	io.sockets.emit('paused', true);
     });
 
     socket.on('unpause', function () {
-
+	io.sockets.emit('paused', false);
       app.service('appointments').remove(null, {
-        step: 'pause'
+        query: {
+		step: 'pause'
+	}
       });
     });
 
@@ -83,6 +86,7 @@ app.configure(socketio(function (io) {
           }
         })
         .then(function (value) {
+	
 		console.log('hih', value.length);
             if (value.length !== 0) {
 		return false;
@@ -91,7 +95,7 @@ app.configure(socketio(function (io) {
 		console.log(response[0]);
 		if (!response[0]) {
 		console.log('ALL CLEAR');
-                clearInterval(qwerty);
+                //clearInterval(qwerty);
               } else {
                 	i++
                 	socket.emit('news', response[0]);
