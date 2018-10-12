@@ -83,14 +83,20 @@ app.configure(socketio(function (io) {
           }
         })
         .then(function (value) {
-            if (value.total === 0) {
-              if (!response.data[0]) {
+		console.log('hih', value.length);
+            if (value.length !== 0) {
+		return false;
+            } else {
+		console.log('comeon');
+		console.log(response[0]);
+		if (!response[0]) {
+		console.log('ALL CLEAR');
                 clearInterval(qwerty);
               } else {
-                i++
-                socket.emit('news', response.data[0]);
+                	i++
+                	socket.emit('news', response[0]);
+		}
               }
-            }
           });
         }
     });
