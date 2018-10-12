@@ -10,13 +10,23 @@ const configuration = require('@feathersjs/configuration');
 const express = require('@feathersjs/express');
 const socketio = require('@feathersjs/socketio');
 
+const NeDB = require('nedb');
+const service = require('feathers-nedb');
+const app = express(feathers());
+
+const Model = new NeDB({
+  filename: './data/appointments.db',
+  autoload: true
+});
+app.use('/appointments', service({
+  Model
+}));
+
 
 const middleware = require('./middleware');
 const services = require('./services');
 const appHooks = require('./app.hooks');
 const channels = require('./channels');
-
-const app = express(feathers());
 
 // Load app configuration
 app.configure(configuration());
@@ -25,44 +35,64 @@ app.use(helmet());
 app.use(cors());
 app.use(compress());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({
+  extended: true
+}));
 app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
 // Host the public folder
 app.use('/', express.static(app.get('public')));
 
 // Set up Plugins and providers
 app.configure(express.rest());
-app.configure(socketio(function(io) {
-  io.on('connection', function(socket) {
+app.configure(socketio(function (io) {
+  io.on('connection', function (socket) {
 
-  socket.on('ready', function () {
+    socket.on('pause', function () {
+      app.service('appointments').create({
+        step: 'pause'
+      });
+    });
+
+    socket.on('unpause', function () {
+
+      app.service('appointments').remove(null, {
+        step: 'pause'
+      });
+    });
+
+    socket.on('ready', function () {
       const appointments = app.service('appointments');
 
       let response;
       let i = 1;
 
-      const qwerty = setInterval(func, 1500);
+      let qwerty = setInterval(func, 1500);
 
-      socket.on('pause', function () {
-          clearInterval(qwerty);
-      })
-      socket.on('unpause', function () {
-          const qwerty = setInterval(func, 1500);
-      })
 
       async function func() {
         response = await appointments.find({
           query: {
             step: i
           }
-      });
-        if (!response.data[0]) {
-          clearInterval(qwerty);
-        } else {
-          i++
-          socket.emit('news', response.data[0]);
+        });
+
+        // if not paused emit data
+        app.service('appointments').find({
+          query: {
+            step: 'pause'
+          }
+        })
+        .then(function (value) {
+            if (value.total === 0) {
+              if (!response.data[0]) {
+                clearInterval(qwerty);
+              } else {
+                i++
+                socket.emit('news', response.data[0]);
+              }
+            }
+          });
         }
-      }
     });
   });
 
@@ -83,7 +113,9 @@ app.configure(channels);
 
 // Configure a middleware for 404s and the error handler
 app.use(express.notFound());
-app.use(express.errorHandler({ logger }));
+app.use(express.errorHandler({
+  logger
+}));
 
 app.hooks(appHooks);
 
