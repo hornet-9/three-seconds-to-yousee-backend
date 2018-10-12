@@ -2,24 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>3 Seconds to youSee</title>
+  <title>My Technician App</title>
 </head>
 <body>
-  <h1>3 Seconds to youSee</h1>
-  <p>Here are some pretend coordinates, coming from a database via a websocket connection</p>
-  <ul id="list1"></ul>
-  <button onclick='pause()'>pause</button>
-  <button onclick='unpause()'>unpause</button>
+  <h1>My Technician App</h1>
+  <h2 id="arrive-header">Arrive to:</h2>
+  <p id="appointment-detail">Mads Winther<br>Rahbeks Alle 12<br>1801 København</p>
+  <button onclick='pause()'>Arrive at property</button>
+  <button onclick='unpause()'>Complete job</button>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
   <script type="text/javascript" src="//unpkg.com/@feathersjs/client@^3.0.0/dist/feathers.js"></script>
   <script type="text/javascript" src="//unpkg.com/feathers-memory@^2.0.0/dist/feathers-memory.js"></script>
   <script src="client.js"></script>
   <script>
     function pause() {
-          socket.emit('pause');
+      document.getElementById('arrive-header').innerHTML = 'Arrived at'
+      socket.emit('pause');
     }
     function unpause() {
-          socket.emit('unpause');
+      document.getElementById('arrive-header').innerHTML = 'Arrive to:'
+      document.getElementById('appointment-detail').innerHTML = 'XXXXXXXXX<br>XXXXXXXX<br>XXXX København'
+      socket.emit('unpause');
     }
   </script>
 </body>
