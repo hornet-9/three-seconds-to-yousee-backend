@@ -1,15 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="white">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>My Technician App</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="./styles.css" />
 </head>
 <body>
-  <h1>My Technician App</h1>
-  <h2 id="arrive-header">Arrive to:</h2>
-  <p id="appointment-detail">Mads Winther<br>Rahbeks Alle 12<br>1801 København</p>
-  <button onclick='pause()'>Arrive at property</button>
-  <button onclick='unpause()'>Complete job</button>
+  <div class="container-fluid">
+    <header>
+      <h1>My Technician App</h1>
+      <ul class="nav nav-justified justify-content-center">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Min tidsplan</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="#">Mine besøg</a>
+          </li>
+      </ul>
+    </header>
+    <section>
+      <h2 id="arrive-header">Arrive to:</h2>
+      <p id="appointment-detail">Mads Winther<br>Rahbeks Alle 12<br>1801 København</p>
+      <div class="buttons">
+        <button class="button button--secondary" id="pause" onclick='pause()'>Arrive at property</button>
+        <button class="button button--secondary" id="unpause" onclick='unpause()'>Complete job</button>
+      </div>
+    </section>
+  </div>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
   <script type="text/javascript" src="//unpkg.com/@feathersjs/client@^3.0.0/dist/feathers.js"></script>
   <script type="text/javascript" src="//unpkg.com/feathers-memory@^2.0.0/dist/feathers-memory.js"></script>
@@ -17,11 +41,15 @@
   <script>
     function pause() {
       document.getElementById('arrive-header').innerHTML = 'Arrived at'
+      document.getElementById('pause').style.display = 'none';
+      document.getElementById('unpause').style.display = 'block';
       socket.emit('pause');
     }
     function unpause() {
       document.getElementById('arrive-header').innerHTML = 'Arrive to:'
-      document.getElementById('appointment-detail').innerHTML = 'XXXXXXXXX<br>XXXXXXXX<br>XXXX København'
+      document.getElementById('appointment-detail').innerHTML = 'Bjørn and Anders<br>Teglholmsgade 1<br>0900 København C'
+      document.getElementById('pause').style.display = 'block';
+      document.getElementById('unpause').style.display = 'none';
       socket.emit('unpause');
     }
   </script>
